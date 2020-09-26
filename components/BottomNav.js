@@ -3,6 +3,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import AccountScreen from "../screens/AccountScreen";
 import OutageScreen from "../screens/OutageScreen";
 import SupportScreen from "../screens/SupportScreen";
+// Icon from ThemedComponents does not properly change colors when unfocused
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { StatusBar } from "react-native";
@@ -27,7 +28,7 @@ const BottomNav = () => {
                     name="Account"
                     component={AccountScreen}
                     options={{
-                        tabBarLabel: "My Account",
+                        tabBarLabel: "Account",
                         tabBarIcon: ({ color }) => (
                             <MaterialIcons
                                 name="account-circle"

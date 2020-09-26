@@ -1,6 +1,5 @@
 import { Dimensions } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const themes = {
     light: {
@@ -9,7 +8,6 @@ export const themes = {
         // Component colors
         $background: "#fafafa",
         $surface: "#ffffff",
-        $overlay: "#000000",
         $error: "#b00020",
         $border: "#00000013",
 
@@ -25,8 +23,7 @@ export const themes = {
 
         // Component colors
         $background: "#121212",
-        $surface: "#121212",
-        $overlay: "#ffffff",
+        $surface: "#1e1e1e",
         $error: "#cf6679",
         $border: "#ffffff13",
 
@@ -73,6 +70,8 @@ export const theme_constants = {
     $secondary: "#43a047",
     $secondaryVariant: "#1e4820",
     $shadowColor: "#000000",
+    $onLight: "#000000",
+    $onDark: "#ffffff",
 
     // Text/icon opacity values
     $highEmphasis: 0.87,
@@ -88,12 +87,32 @@ export const theme_constants = {
     $screenHeight: Dimensions.get("window").height,
 };
 
+export const text_colors = EStyleSheet.create({
+    onLight: {
+        color: "$onLight",
+    },
+    onDark: {
+        color: "$onDark",
+    },
+});
+
+export const opacity = EStyleSheet.create({
+    high: {
+        opacity: "$highEmphasis",
+    },
+    med: {
+        opacity: "$normalEmphasis",
+    },
+    low: {
+        opacity: "$disabled",
+    },
+});
+
 export const global_styles = EStyleSheet.create({
     container: {
         flex: 1,
         margin: 0,
         padding: 0,
-        paddingTop: () => getStatusBarHeight(),
     },
     h1: {
         fontSize: 30,

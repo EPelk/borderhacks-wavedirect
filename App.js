@@ -6,6 +6,7 @@ import AnimatedSplash from "react-native-animated-splash-screen";
 import BottomNav from "./components/BottomNav";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { nav_themes, themes, theme_constants } from "./util/style";
+import DrawerNav from "./components/DrawerNav";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -32,9 +33,11 @@ export default class App extends React.Component {
      * Sets the app theme.
      * @param {string} theme `"light"` or `"dark"`
      */
-    async setTheme(theme) {
+    async toggleTheme() {
+        let newTheme = this.state.theme == "dark" ? "light" : "dark";
         // Build styles FIRST so they are ready when the re-render occurs
-        this.buildStyles(theme);
+        this.buildStyles(newTheme);
+        this.setState({ theme: newTheme });
         //await this.setAsync("theme", theme);
     }
 
@@ -49,8 +52,13 @@ export default class App extends React.Component {
                 logoWidth={158}
                 disableBackgroundImage={true}
             >
-                <NavigationContainer theme={nav_themes[this.state.theme]}>
-                    <BottomNav />
+                <NavigationContainer
+                    theme={{
+                        ...nav_themes[this.state.theme],
+                        toggleTheme: () => this.toggleTheme(),
+                    }}
+                >
+                    <DrawerNav />
                 </NavigationContainer>
             </AnimatedSplash>
         );

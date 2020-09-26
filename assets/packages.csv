@@ -1,0 +1,6 @@
+﻿ID ,Name         ,Data Limit ,Upload speed (Mbps) ,Download speed (Mbps)
+0  ,Unlimited 10 ,Unlimited  ,5                   ,10
+1  ,Unlimited 20 ,Unlimited  ,10                  ,20
+2  ,Unlimited 30 ,Unlimited  ,15                  ,30
+3  ,Unlimited 40 ,Unlimited  ,20                  ,40
+4  ,Unlimited 50 ,Unlimited  ,25                  ,50

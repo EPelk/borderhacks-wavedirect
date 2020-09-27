@@ -1,25 +1,250 @@
 import { useTheme } from "@react-navigation/native";
-import React from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import React, { useRef, useState } from "react";
+import { View, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { text_colors, global_styles, opacity } from "../util/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text, Icon } from "../util/ThemedComponents";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import * as Linking from "expo-linking";
 import { AsyncContext } from "../util/async-manager";
 import { fetchPackage } from "../util/mock-api";
+import { colors } from "react-native-elements";
+
+const EditEmail = (props) => {
+    const [email, setEmail] = useState("");
+    const emailRef = useRef(null);
+
+    const submit = () => {
+        props.context.setState((state) => ({
+            user_data: { ...state.user_data, Email: email },
+        }));
+        alert(
+            "Since the test data is hard-coded in the app, this change will reset when you log out or restart."
+        );
+        props.setChangingEmail(false);
+    };
+
+    return (
+        <View
+            style={[
+                EStyleSheet.absoluteFill,
+                {
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                },
+            ]}
+        >
+            <View
+                style={[
+                    styles.card,
+                    {
+                        width: "65%",
+                        flexDirection: "column",
+                        backgroundColor: EStyleSheet.value("$background"),
+                    },
+                ]}
+            >
+                <Text style={[global_styles.h3, opacity.high]}>
+                    Enter a new email address:
+                </Text>
+                <TextInput
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    autoCompleteType="email"
+                    returnKeyType="done"
+                    placeholder="Type here"
+                    placeholderTextColor={
+                        props.colors.text + EStyleSheet.value("$normalHex")
+                    }
+                    style={props.inputStyle}
+                    ref={emailRef}
+                    onSubmitEditing={submit}
+                />
+                <View style={{ flexDirection: "row", width: "100%" }}>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: EStyleSheet.value(
+                                "$primaryVariant"
+                            ),
+                            flexGrow: 1,
+                            paddingVertical: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignSelf: "flex-end",
+                            borderRadius: 5,
+                        }}
+                        onPress={() => {
+                            props.setChangingEmail(false);
+                        }}
+                    >
+                        <Text style={[text_colors.onLight, global_styles.h3]}>
+                            CANCEL
+                        </Text>
+                    </TouchableOpacity>
+                    <View style={{ width: 15 }}></View>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: EStyleSheet.value(
+                                props.dark ? "$secondaryVariant" : "$secondary"
+                            ),
+                            flexGrow: 1,
+                            paddingVertical: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignSelf: "flex-end",
+                            borderRadius: 5,
+                        }}
+                        onPress={submit}
+                    >
+                        <Text
+                            style={[
+                                text_colors.onDark,
+                                global_styles.h3,
+                                props.dark ? opacity.high : {},
+                            ]}
+                        >
+                            SUBMIT
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+const EditPhone = (props) => {
+    const [phone, setPhone] = useState("");
+    const phoneRef = useRef(null);
+
+    const submit = () => {
+        props.context.setState((state) => ({
+            user_data: { ...state.user_data, Phone: phone },
+        }));
+        alert(
+            "Since the test data is hard-coded in the app, this change will reset when you log out or restart."
+        );
+        props.setChangingPhone(false);
+    };
+
+    return (
+        <View
+            style={[
+                EStyleSheet.absoluteFill,
+                {
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                },
+            ]}
+        >
+            <View
+                style={[
+                    styles.card,
+                    {
+                        width: "65%",
+                        flexDirection: "column",
+                        backgroundColor: EStyleSheet.value("$background"),
+                    },
+                ]}
+            >
+                <Text style={[global_styles.h3, opacity.high]}>
+                    Enter a new phone number:
+                </Text>
+                <TextInput
+                    onChangeText={setPhone}
+                    keyboardType="phone-pad"
+                    textContentType="telephoneNumber"
+                    autoCompleteType="tel"
+                    returnKeyType="done"
+                    placeholder="Type here"
+                    placeholderTextColor={
+                        props.colors.text + EStyleSheet.value("$normalHex")
+                    }
+                    style={props.inputStyle}
+                    ref={phoneRef}
+                    onSubmitEditing={submit}
+                />
+                <View style={{ flexDirection: "row", width: "100%" }}>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: EStyleSheet.value(
+                                "$primaryVariant"
+                            ),
+                            flexGrow: 1,
+                            paddingVertical: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignSelf: "flex-end",
+                            borderRadius: 5,
+                        }}
+                        onPress={() => {
+                            props.setChangingPhone(false);
+                        }}
+                    >
+                        <Text style={[text_colors.onLight, global_styles.h3]}>
+                            CANCEL
+                        </Text>
+                    </TouchableOpacity>
+                    <View style={{ width: 15 }}></View>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: EStyleSheet.value(
+                                props.dark ? "$secondaryVariant" : "$secondary"
+                            ),
+                            flexGrow: 1,
+                            paddingVertical: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignSelf: "flex-end",
+                            borderRadius: 5,
+                        }}
+                        onPress={submit}
+                    >
+                        <Text
+                            style={[
+                                text_colors.onDark,
+                                global_styles.h3,
+                                props.dark ? opacity.high : {},
+                            ]}
+                        >
+                            SUBMIT
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    );
+};
 
 const AccountScreen = () => {
+    const [changingEmail, setChangingEmail] = useState(false);
+    const [changingPhone, setChangingPhone] = useState(false);
     const { dark, colors, toggleTheme } = useTheme();
+    const inputStyle = {
+        backgroundColor: colors.card,
+        color: colors.text + EStyleSheet.value("$highHex"),
+        fontSize: 16,
+        flexGrow: 1,
+        flexShrink: 1,
+        width: "100%",
+        marginVertical: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderWidth: 0,
+        borderRadius: 5,
+    };
     return (
         <View style={global_styles.container}>
-            <ScrollView>
-                <AsyncContext.Consumer>
-                    {(context) => {
-                        const user = context.state.user_data;
-                        const pkg = fetchPackage(user.Package_id);
-                        return (
-                            <>
+            <AsyncContext.Consumer>
+                {(context) => {
+                    const user = context.state.user_data;
+                    const pkg = fetchPackage(user.Package_id);
+                    return (
+                        <>
+                            <ScrollView>
                                 <View
                                     style={{
                                         alignItems: "center",
@@ -74,10 +299,28 @@ const AccountScreen = () => {
                                             style={[
                                                 global_styles.h3,
                                                 opacity.med,
+                                                { flexGrow: 1 },
                                             ]}
                                         >
                                             {user.Email}
                                         </Text>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                setChangingEmail(true)
+                                            }
+                                        >
+                                            <Icon
+                                                name="edit"
+                                                size={24}
+                                                style={[
+                                                    styles.cardIcon,
+                                                    {
+                                                        marginLeft: 15,
+                                                        marginRight: 0,
+                                                    },
+                                                ]}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.card}>
                                         <Icon
@@ -89,10 +332,29 @@ const AccountScreen = () => {
                                             style={[
                                                 global_styles.h3,
                                                 opacity.med,
+                                                { flexGrow: 1 },
                                             ]}
                                         >
                                             {user.Phone}
                                         </Text>
+
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                setChangingPhone(true)
+                                            }
+                                        >
+                                            <Icon
+                                                name="edit"
+                                                size={24}
+                                                style={[
+                                                    styles.cardIcon,
+                                                    {
+                                                        marginLeft: 15,
+                                                        marginRight: 0,
+                                                    },
+                                                ]}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.card}>
                                         <Icon
@@ -204,12 +466,96 @@ const AccountScreen = () => {
                                             </Text>
                                         </View>
                                     </View>
+                                    <Text
+                                        style={[
+                                            global_styles.h2,
+                                            opacity.high,
+                                            { marginTop: 15 },
+                                        ]}
+                                    >
+                                        Contact Sales
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.card,
+                                            {
+                                                backgroundColor: EStyleSheet.value(
+                                                    "$secondaryVariant"
+                                                ),
+                                            },
+                                        ]}
+                                        onPress={() =>
+                                            Linking.openURL(
+                                                "mailto://sales@wavedirect.net"
+                                            )
+                                        }
+                                    >
+                                        <Icon
+                                            name="email"
+                                            size={24}
+                                            style={[
+                                                styles.cardIcon,
+                                                opacity.high,
+                                            ]}
+                                        />
+                                        <Text
+                                            style={[
+                                                global_styles.h3,
+                                                opacity.high,
+                                            ]}
+                                        >
+                                            Email sales@wavedirect.net
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.card,
+                                            {
+                                                backgroundColor: EStyleSheet.value(
+                                                    "$secondary"
+                                                ),
+                                            },
+                                        ]}
+                                        onPress={() =>
+                                            Linking.openURL("tel://8558449283")
+                                        }
+                                    >
+                                        <Icon
+                                            name="phone"
+                                            size={24}
+                                            style={[
+                                                styles.cardIcon,
+                                                { opacity: 1 },
+                                            ]}
+                                        />
+                                        <Text style={[global_styles.h3]}>
+                                            Call (855) 844-9283
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
-                            </>
-                        );
-                    }}
-                </AsyncContext.Consumer>
-            </ScrollView>
+                            </ScrollView>
+                            {changingEmail ? (
+                                <EditEmail
+                                    setChangingEmail={setChangingEmail}
+                                    dark={dark}
+                                    inputStyle={inputStyle}
+                                    colors={colors}
+                                    context={context}
+                                />
+                            ) : null}
+                            {changingPhone ? (
+                                <EditPhone
+                                    setChangingPhone={setChangingPhone}
+                                    dark={dark}
+                                    inputStyle={inputStyle}
+                                    colors={colors}
+                                    context={context}
+                                />
+                            ) : null}
+                        </>
+                    );
+                }}
+            </AsyncContext.Consumer>
         </View>
     );
 };

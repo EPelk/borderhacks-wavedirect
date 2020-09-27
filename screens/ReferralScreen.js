@@ -194,7 +194,7 @@ const ReferralScreen = (props) => {
                         keyboardType="email-address"
                         textContentType="emailAddress"
                         autoCompleteType="email"
-                        returnKeyType="go"
+                        returnKeyType="done"
                         placeholder="Type here"
                         placeholderTextColor={
                             colors.text + EStyleSheet.value("$normalHex")

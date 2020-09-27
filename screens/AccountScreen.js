@@ -1,8 +1,7 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { StatusBar, View, ScrollView, TouchableOpacity } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { text_colors, global_styles, opacity } from "../util/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text, Icon } from "../util/ThemedComponents";

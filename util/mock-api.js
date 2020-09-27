@@ -52,3 +52,21 @@ export function fetchPackage(id) {
 
     return pkg;
 }
+
+export async function replyToMessage(msg) {
+    const delay = Math.floor(Math.random() * 4001) + 1000; // 1-5 seconds
+    const numLines = Math.floor(Math.random() * 16) + 1; // 1-16 lines
+    var msg = "";
+    for (let i = 0; i < numLines; i++) {
+        const numChars = Math.floor(Math.random() * 16) + 5; // 5-20 chars
+        for (let j = 0; j < numChars; j++) {
+            msg += Math.floor(Math.random() * 10);
+        }
+        msg += "\n";
+    }
+    return new Promise((resolve) =>
+        setTimeout(() => {
+            resolve(msg);
+        }, delay)
+    );
+}

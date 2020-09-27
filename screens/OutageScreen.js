@@ -113,6 +113,7 @@ const OutageScreen = () => {
                                         {
                                             width: "55%",
                                             paddingLeft: 15,
+                                            textAlign: "right",
                                         },
                                     ]}
                                 >

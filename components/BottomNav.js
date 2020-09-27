@@ -28,7 +28,7 @@ const BottomNav = () => {
                     name="Account"
                     component={AccountScreen}
                     options={{
-                        tabBarLabel: "Account",
+                        tabBarLabel: "My Account",
                         tabBarIcon: ({ color }) => (
                             <MaterialIcons
                                 name="account-circle"

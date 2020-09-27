@@ -1,13 +1,5 @@
-import { useTheme } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
-import {
-    View,
-    ScrollView,
-    SectionList,
-    FlatList,
-    TextInput,
-    TouchableOpacity,
-} from "react-native";
+import React from "react";
+import { View, FlatList, TextInput, TouchableOpacity } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { AsyncContext } from "../util/async-manager";
@@ -15,16 +7,27 @@ import { replyToMessage } from "../util/mock-api";
 import { global_styles, opacity, text_colors } from "../util/style";
 import { Icon, Text } from "../util/ThemedComponents";
 
+/**
+ * Screen providing a live chat feature for tech support.
+ * The setState method of class components is needed to
+ * properly update the messages list.
+ */
 export default class SupportScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             msgInput: "",
+            // Running log of all chat messages
             messages: [],
         };
         this.msgRef = React.createRef();
 
+        /**
+         * Add messages to the log and handle chat simulation.
+         */
         this.sendMessage = () => {
+            // Append new messages to the front of the
+            // log so they appear first (i.e. lowest) in the chat.
             this.setState((state) => ({
                 messages: [
                     {
@@ -35,6 +38,8 @@ export default class SupportScreen extends React.Component {
                     ...state.messages,
                 ],
             }));
+            // Simulate a real chat with randomly generated and
+            // delayed replies.
             replyToMessage(this.state.msgInput).then((data) => {
                 this.setState((state) => ({
                     messages: [
@@ -47,15 +52,19 @@ export default class SupportScreen extends React.Component {
                     ],
                 }));
             });
+            // Clear input for the next message
             this.msgRef.current.clear();
             this.setState({ msgInput: "" });
         };
     }
     render() {
         return (
+            // AsyncContext is used to trigger re-renders when the theme changes.
+            // This is because class components cannot use `useTheme`.
             <AsyncContext.Consumer>
                 {() => (
                     <View style={global_styles.container}>
+                        {/* Chat log grows and shrinks to accommodate message input */}
                         <View
                             style={{
                                 width: "100%",
@@ -64,7 +73,7 @@ export default class SupportScreen extends React.Component {
                             }}
                         >
                             <FlatList
-                                style={{}}
+                                // Put the beginning of the list at the bottom
                                 inverted={true}
                                 ListFooterComponent={
                                     <Text
@@ -96,6 +105,8 @@ export default class SupportScreen extends React.Component {
                                             padding: 10,
                                             width: "60%",
                                             alignSelf:
+                                                // Put user's messages on the right
+                                                // and others on the left
                                                 item.sender == "local"
                                                     ? "flex-end"
                                                     : "flex-start",
@@ -129,6 +140,7 @@ export default class SupportScreen extends React.Component {
                                 data={this.state.messages}
                             />
                         </View>
+                        {/* Message input area */}
                         <View
                             style={{
                                 maxHeight:

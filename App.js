@@ -1,30 +1,43 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import AnimatedSplash from "react-native-animated-splash-screen";
-import BottomNav from "./components/BottomNav";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { nav_themes, themes, theme_constants } from "./util/style";
 import DrawerNav from "./components/DrawerNav";
 import { AsyncContext, readManyValues, setValue } from "./util/async-manager";
 import { fetchAPStatus, fetchFromAccessToken } from "./util/mock-api";
+
+/**
+ * App entry point.
+ */
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // The splash screen will not disappear until
+            // these are both true.
             is_loaded: false,
             splash_timeout: false,
+
+            // These are stored locally and loaded during app
+            // startup.
             theme: "light",
-            user_data: undefined,
             accessToken: undefined,
+
+            // These are not stored locally and are always
+            // fetched on startup or login.
+            user_data: undefined,
             access_points: undefined,
             access_point_refresh: undefined,
             access_point_refresh_time: undefined,
         };
 
+        // Declare member functions that will be shared in AsyncContext.
+        // This is done in the constructor to preserve the value of `this`.
+
         /**
-         * Sets a value in AsyncStorage and ensures everything updates.
+         * Sets a value in AsyncStorage and updates the app state.
          * Also see Async.js.
          * @param {string}  key            - Key to set
          * @param {*}       val            - Value to set
@@ -42,6 +55,11 @@ export default class App extends React.Component {
             return false;
         };
 
+        /**
+         * Fetches user data for an access token and stores it in the
+         * app state.
+         * @param {*} token Access token (email) to fetch
+         */
         this.fetchUser = async (token = this.state.accessToken) => {
             if (token != undefined) {
                 this.setState({
@@ -51,8 +69,8 @@ export default class App extends React.Component {
         };
 
         /**
-         * Sets the app theme.
-         * @param {string} theme `"light"` or `"dark"`
+         * Toggles the app theme. Also updates the app state and
+         * asynchronous storage.
          */
         this.toggleTheme = async () => {
             let newTheme = this.state.theme == "dark" ? "light" : "dark";
@@ -62,6 +80,9 @@ export default class App extends React.Component {
             await this.setAsync("theme", newTheme);
         };
 
+        /**
+         * Fetch information on access points and update the app state.
+         */
         this.updateAPStatus = async () => {
             const timestamp = new Date().toLocaleTimeString();
             this.setState({
@@ -70,14 +91,24 @@ export default class App extends React.Component {
             });
         };
 
+        // End member function declarations
+
+        // Theme hasn't been loaded from AsyncStorage yet, but
+        // some components might need the styles.
         this.buildStyles(this.state.theme);
 
         this.init();
+
+        // Time out the splash screen after 2 seconds
         setTimeout(() => {
             this.setState({ splash_timeout: true });
         }, 2000);
     }
 
+    /**
+     * Load data from AsyncStorage and the mock API.
+     * Also build loaded styles and update app state.
+     */
     async init() {
         await this.loadAsync();
         await this.loadFromAPI();
@@ -85,6 +116,9 @@ export default class App extends React.Component {
         this.setState({ is_loaded: true });
     }
 
+    /**
+     * Load data from AsyncStorage into the app state.
+     */
     async loadAsync() {
         let state = await readManyValues(["theme", "accessToken"], true);
         if (state.theme == null) {
@@ -96,10 +130,13 @@ export default class App extends React.Component {
         this.setState(state);
     }
 
+    /**
+     * Load data from the mock api into the app state.
+     */
     async loadFromAPI() {
-        // Fetch access point data.
         // If an access token is defined, fetch the corresponding user data.
         await this.fetchUser();
+        // Fetch access point data.
         await this.updateAPStatus();
         // Update access point data every minute
         this.setState({
@@ -109,10 +146,10 @@ export default class App extends React.Component {
         });
     }
 
-    async componentDidMount() {
-        this.setState({ is_loaded: true });
-    }
-
+    /**
+     * Builds EStyleSheet themes.
+     * @param {*} theme "light" or "dark"
+     */
     buildStyles(theme) {
         EStyleSheet.build({
             ...themes[theme],
@@ -137,6 +174,8 @@ export default class App extends React.Component {
                         setAsync: this.setAsync,
                         fetchUser: this.fetchUser,
                         updateAPStatus: this.updateAPStatus,
+                        // () => {} notation to preserve the value
+                        // of `this`.
                         setState: (state, callback) => {
                             this.setState(state, callback);
                         },
@@ -155,12 +194,3 @@ export default class App extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});

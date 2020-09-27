@@ -1,10 +1,14 @@
 import React from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 
+/**
+ * Context used to store data and functions used across the app.
+ * See its implementation in App.js for more information.
+ */
 export const AsyncContext = React.createContext({});
 
 /**
- * Reads a value from AsyncStorage. In most cases, use `AsyncContext` instead.
+ * Reads a value from AsyncStorage. In most cases, this should not be called directly.
  * @param {string}  key      - Key to read from. Do not include a leading '@'
  * @param {boolean} isString - Whether the value is a string or a serialized object
  *
@@ -40,13 +44,13 @@ export const readManyValues = async (keys, isString) => {
 };
 
 /**
- * Writes a value to AsyncStorage. In most cases, use `App.setAsync` instead.
- * @param {string}  key            - The key to write the value to
+ * Writes a value to AsyncStorage. In most cases, this should not be called directly.
+ * @param {string}  key            - The key to write the value to.
  * @param {*}       value          - The value to write. By default,
  *                                   `JSON.stringify` will not be called if
  *                                   `typeof value == 'string'`.
  * @param {boolean} forceStringify - Whether to call `JSON.stringify` even if
- *                                   `val` is a string
+ *                                   `val` is a string.
  *
  * @returns {boolean} Whether the operation succeeded
  */

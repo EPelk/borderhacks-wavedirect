@@ -15,6 +15,12 @@ import LoginScreen from "../screens/LoginScreen";
 import { AsyncContext } from "../util/async-manager";
 import ReferralScreen from "../screens/ReferralScreen";
 
+/**
+ * Rendered content of the navigation drawer.
+ * @param {*} props
+ * @param {*} props.context The app context as provided by `AsyncContext`
+ * @param {*} props.navigation Automatically provided by the navigator
+ */
 const DrawerContent = (props) => {
     const { dark, toggleTheme } = useTheme();
     return (
@@ -24,8 +30,10 @@ const DrawerContent = (props) => {
                     animated={true}
                     hidden={false}
                     backgroundColor="#0000"
+                    // Adjust status bar color for best contrast with app background
                     barStyle={dark ? "light-content" : "dark-content"}
                 />
+                {/* Various external links */}
                 <DrawerItem
                     icon={() => (
                         <MaterialCommunityIcons
@@ -146,12 +154,15 @@ const DrawerContent = (props) => {
                         )
                     }
                 />
+                {/* Link to the Refer a Friend page of the app. This is disabled
+                    when the user is signed out. */}
                 <DrawerItem
                     icon={() => (
                         <Icon
                             name="people"
                             size={24}
                             style={
+                                // Low/disabled opacity when signed out
                                 opacity[
                                     props.context.state.user_data
                                         ? "high"
@@ -164,6 +175,7 @@ const DrawerContent = (props) => {
                         <Text
                             style={
                                 opacity[
+                                    // Low/disabled opacity when signed out
                                     props.context.state.user_data
                                         ? "high"
                                         : "low"
@@ -174,12 +186,14 @@ const DrawerContent = (props) => {
                         </Text>
                     )}
                     onPress={() => {
+                        // Must be signed in to refer a friend
                         if (!props.context.state.accessToken) {
                             return;
                         }
                         props.navigation.navigate("ReferScreen");
                     }}
                 />
+                {/* Button to toggle between light and dark themes */}
                 <DrawerItem
                     icon={() => (
                         <MaterialCommunityIcons
@@ -194,6 +208,8 @@ const DrawerContent = (props) => {
                     label={() => <Text style={opacity.high}>Toggle Theme</Text>}
                     onPress={toggleTheme}
                 />
+                {/* Button to log out of the app. Disabled if the user is
+                    already logged out. */}
                 <DrawerItem
                     icon={() => (
                         <MaterialCommunityIcons
@@ -202,6 +218,7 @@ const DrawerContent = (props) => {
                             style={[
                                 text_colors[dark ? "onDark" : "onLight"],
                                 opacity[
+                                    // Low/disabled opacity when signed out
                                     props.context.state.user_data
                                         ? "high"
                                         : "low"
@@ -213,6 +230,7 @@ const DrawerContent = (props) => {
                         <Text
                             style={
                                 opacity[
+                                    // Low/disabled opacity when signed out
                                     props.context.state.user_data
                                         ? "high"
                                         : "low"
@@ -223,6 +241,7 @@ const DrawerContent = (props) => {
                         </Text>
                     )}
                     onPress={() => {
+                        // Already logged out
                         if (!props.context.state.accessToken) {
                             return;
                         }
@@ -232,6 +251,7 @@ const DrawerContent = (props) => {
                     }}
                 />
             </DrawerContentScrollView>
+            {/* Logo & app info */}
             <View
                 style={{
                     position: "absolute",
@@ -257,6 +277,10 @@ const DrawerContent = (props) => {
     );
 };
 
+/**
+ * Outermost navigation component of the app. Provides access to secondary pages,
+ * links, and simple actions.
+ */
 const DrawerNav = () => {
     const Drawer = createDrawerNavigator();
 
@@ -264,6 +288,7 @@ const DrawerNav = () => {
         <AsyncContext.Consumer>
             {(context) => (
                 <Drawer.Navigator
+                    // Only go th Home if the user is logged in
                     initialRoute={context.state.user_data ? "Home" : "Login"}
                     backBehavior="initialRoute"
                     drawerContent={(props) => (
@@ -271,6 +296,8 @@ const DrawerNav = () => {
                     )}
                     sceneContainerStyle={global_styles.container}
                 >
+                    {/* Block access to all non-login screens until the user
+                        is signed in. */}
                     {context.state.user_data ? (
                         <>
                             <Drawer.Screen name="Home" component={BottomNav} />

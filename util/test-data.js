@@ -1,3 +1,12 @@
+// This file contains the provided test data converted to JSON format.
+// Many fields have been renamed from their CSV versions, and some errors
+// in the data have been corrected.
+
+/**
+ * User and product information about each customer.
+ * Note that some customers have been assigned new access points because the
+ * original value was outside the range of possible values.
+ */
 export const customers = [
     {
         Account_number: 10000,
@@ -651,6 +660,9 @@ export const customers = [
     },
 ];
 
+/**
+ * Information about each service package.
+ */
 export const packages = [
     {
         ID: 0,
@@ -689,6 +701,9 @@ export const packages = [
     },
 ];
 
+/**
+ * Information about the access points and their status
+ */
 export const access_points = [
     {
         ID: 0,

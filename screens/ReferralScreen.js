@@ -1,3 +1,5 @@
+// Refer a friend form. Accessed from the nav drawer.
+
 import { useTheme } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
@@ -7,6 +9,10 @@ import { AsyncContext } from "../util/async-manager";
 import { global_styles, opacity, text_colors } from "../util/style";
 import { Icon, Text } from "../util/ThemedComponents";
 
+/**
+ * Refer a friend form.
+ * @param {*} props Contains a navigation object passed by the drawer navigator
+ */
 const ReferralScreen = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -20,6 +26,9 @@ const ReferralScreen = (props) => {
 
     const { dark, colors } = useTheme();
 
+    /**
+     * Common styles for text input fields
+     */
     const inputStyle = {
         backgroundColor: colors.card,
         color: colors.text + EStyleSheet.value("$highHex"),
@@ -33,6 +42,11 @@ const ReferralScreen = (props) => {
         borderRadius: 5,
     };
 
+    /**
+     * Simulate form submission/friend referral.
+     * This function will present an alert box with the entered
+     * information before clearing the form.
+     */
     const submitForm = () => {
         alert(
             "This is a method stub. Submitting refer a friend entry for:\n" +
@@ -56,6 +70,7 @@ const ReferralScreen = (props) => {
 
     return (
         <View style={global_styles.container}>
+            {/* Page header */}
             <View
                 style={{
                     width: "100%",
@@ -72,6 +87,8 @@ const ReferralScreen = (props) => {
                         <TouchableOpacity
                             onPress={() =>
                                 props.navigation.navigate(
+                                    // In theory, this page cannot be accessed when the
+                                    // user is logged out, but better safe than sorry.
                                     context.state.user_data ? "Home" : "Login"
                                 )
                             }
@@ -94,12 +111,14 @@ const ReferralScreen = (props) => {
                     screen */}
                 <Icon name="arrow-back" size={34} style={{ opacity: 0 }} />
             </View>
+            {/* Refer a Friend form */}
             <View style={{ padding: 15, flexGrow: 1 }}>
                 <Text style={[opacity.high, global_styles.h3]}>
                     Fill out the form below to refer a friend to WaveDirect. If
                     they sign up, both they and you will recieve a coupon code
                     for $10 off!
                 </Text>
+                {/* First name input */}
                 <View
                     style={{
                         flexDirection: "row",
@@ -126,6 +145,7 @@ const ReferralScreen = (props) => {
                         onSubmitEditing={() => lastNameRef.current.focus()}
                     />
                 </View>
+                {/* Last name input */}
                 <View
                     style={{
                         flexDirection: "row",
@@ -151,6 +171,7 @@ const ReferralScreen = (props) => {
                         onSubmitEditing={() => phoneNumberRef.current.focus()}
                     />
                 </View>
+                {/* Phone number input */}
                 <View
                     style={{
                         flexDirection: "row",
@@ -177,7 +198,7 @@ const ReferralScreen = (props) => {
                         onSubmitEditing={() => emailRef.current.focus()}
                     />
                 </View>
-
+                {/* Email address input */}
                 <View
                     style={{
                         flexDirection: "row",
@@ -204,8 +225,10 @@ const ReferralScreen = (props) => {
                         onSubmitEditing={submitForm}
                     />
                 </View>
+                {/* Submit button */}
                 <TouchableOpacity
                     style={{
+                        // Change shade based on theme
                         backgroundColor: EStyleSheet.value(
                             dark ? "$secondaryVariant" : "$secondary"
                         ),
@@ -222,6 +245,8 @@ const ReferralScreen = (props) => {
                         style={[
                             text_colors.onDark,
                             global_styles.h3,
+                            // Tweak opacity (full vs. not-quite-full)
+                            // based on theme/button shade
                             dark ? opacity.high : {},
                         ]}
                     >

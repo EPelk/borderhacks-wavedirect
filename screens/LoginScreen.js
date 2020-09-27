@@ -8,6 +8,9 @@ import { global_styles, text_colors } from "../util/style";
 import { login as getUser } from "../util/mock-api";
 import { AsyncContext } from "../util/async-manager";
 
+/**
+ * Screen to log in to the app on first startup or after logging out
+ */
 const LoginScreen = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -15,10 +18,17 @@ const LoginScreen = () => {
     const loginBtn = useRef(null);
     const { colors } = useTheme();
 
+    /**
+     * Simulates user authentication and saves login data.
+     * @param {*} context AsyncContext to provide necessary functions
+     *                    from App.js
+     */
     const login = async (context) => {
         const user = getUser(username, password);
         if (user != false) {
+            // Simulate a login access token with the email address
             await context.setAsync("accessToken", user.Email);
+            // Load user data into app state
             await context.fetchUser(user.Email);
         } else {
             alert(
@@ -36,6 +46,8 @@ const LoginScreen = () => {
                         { backgroundColor: colors.primary },
                     ]}
                 >
+                    {/* Set size and position such that nothing is blocked by
+                        the keyboard. */}
                     <View
                         style={{
                             alignItems: "center",
@@ -94,6 +106,9 @@ const LoginScreen = () => {
     );
 };
 
+/**
+ * Stylesheet for the username and password input fields.
+ */
 const styles = EStyleSheet.create({
     input: {
         backgroundColor: "#ffffff",

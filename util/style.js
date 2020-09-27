@@ -1,6 +1,10 @@
 import { Dimensions } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 
+/**
+ * Colors that vary by theme.
+ * Accessed through `EStyleSheet.value`.
+ */
 export const themes = {
     light: {
         $theme: "light",
@@ -36,6 +40,10 @@ export const themes = {
     },
 };
 
+/**
+ * Theme data to be passed to the navigation container.
+ * Accessed through `useTheme`.
+ */
 export const nav_themes = {
     light: {
         dark: false,
@@ -63,6 +71,10 @@ export const nav_themes = {
     },
 };
 
+/**
+ * Values that are constant across both themes.
+ * Accessed through `EStylesheet.value`.
+ */
 export const theme_constants = {
     // Colors
     $primary: "#bb131a",
@@ -87,6 +99,9 @@ export const theme_constants = {
     $screenHeight: Dimensions.get("window").height,
 };
 
+/**
+ * Shorthand/convenience styles for text colors.
+ */
 export const text_colors = EStyleSheet.create({
     onLight: {
         color: "$onLight",
@@ -96,6 +111,9 @@ export const text_colors = EStyleSheet.create({
     },
 });
 
+/**
+ * Shorthand/convenience styles for opacity.
+ */
 export const opacity = EStyleSheet.create({
     high: {
         opacity: "$highEmphasis",
@@ -108,6 +126,9 @@ export const opacity = EStyleSheet.create({
     },
 });
 
+/**
+ * Common component styles used across the app.
+ */
 export const global_styles = EStyleSheet.create({
     container: {
         flex: 1,

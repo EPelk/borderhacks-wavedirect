@@ -1,3 +1,5 @@
+// Screen providing an outage map and associated functionality
+
 import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -17,6 +19,7 @@ const OutageScreen = () => {
                 const ap = context.state.access_points;
                 const lastUpdated = context.state.access_point_refresh_time;
                 let currentAP = null;
+                // Get the current AP from the list of all APs
                 ap.some((item) => {
                     item.ID == user.AP_id
                         ? (() => {
@@ -26,14 +29,17 @@ const OutageScreen = () => {
                         : {};
                     return false;
                 });
+
                 return (
                     <View style={global_styles.container}>
+                        {/* Textual information and refresh button */}
                         <View
                             style={{
                                 padding: 15,
                                 paddingTop: 15 + getStatusBarHeight(),
                             }}
                         >
+                            {/* Current AP */}
                             <View
                                 style={{
                                     flexDirection: "row",
@@ -49,6 +55,7 @@ const OutageScreen = () => {
                                     {currentAP.Name}
                                 </Text>
                             </View>
+                            {/* Current Connection Status */}
                             <View
                                 style={{
                                     flexDirection: "row",
@@ -67,6 +74,7 @@ const OutageScreen = () => {
                                         opacity.high,
                                         {
                                             color:
+                                                // Green if UP, red if DOWN
                                                 currentAP.Status == "up"
                                                     ? colors.notification
                                                     : colors.primary,
@@ -76,6 +84,7 @@ const OutageScreen = () => {
                                     {currentAP.Status.toUpperCase()}
                                 </Text>
                             </View>
+                            {/* Refresh the map/information */}
                             <View
                                 style={{
                                     flexDirection: "row",
@@ -85,9 +94,13 @@ const OutageScreen = () => {
                                     marginTop: 10,
                                 }}
                             >
+                                {/* This button updates all AP information via
+                                    the AsyncContext */}
                                 <TouchableOpacity
                                     style={{
                                         backgroundColor: EStyleSheet.value(
+                                            // Darker shade in dark mode
+                                            // Lighter shade in light mode
                                             dark
                                                 ? "$secondaryVariant"
                                                 : "$secondary"
@@ -104,6 +117,8 @@ const OutageScreen = () => {
                                         style={[
                                             text_colors.onDark,
                                             global_styles.h2,
+                                            // On light green, full opacity pops best
+                                            // On dark green, .87 opacity looks good
                                             dark ? opacity.high : {},
                                         ]}
                                     >
@@ -125,8 +140,10 @@ const OutageScreen = () => {
                                 </Text>
                             </View>
                         </View>
+                        {/* Outage map */}
                         <MapView
                             initialRegion={{
+                                // Coordinates pulled from online coverage map
                                 latitude: 42.24556624862553,
                                 longitude: -82.4607114,
                                 latitudeDelta: 1,
@@ -136,54 +153,64 @@ const OutageScreen = () => {
                             customMapStyle={dark ? darkMapStyle : []}
                             style={{ width: "100%", flexGrow: 1 }}
                         >
-                            {ap.map((item) => {
-                                return (
-                                    <>
-                                        <Circle
-                                            key={"circle" + item.ID}
-                                            center={{
-                                                latitude: item.Latitude,
-                                                longitude: item.Longitude,
-                                            }}
-                                            radius={item.Radius * 1000}
-                                            fillColor={
-                                                item.Status == "up"
-                                                    ? colors.notification +
-                                                      EStyleSheet.value(
-                                                          "$disabledHex"
-                                                      )
-                                                    : colors.primary +
-                                                      EStyleSheet.value(
-                                                          "$disabledHex"
-                                                      )
-                                            }
-                                        />
-                                        <Marker
-                                            title={item.Name}
-                                            key={"marker" + item.ID}
-                                            description={
-                                                "Current Status: " +
-                                                item.Status.toUpperCase()
-                                            }
-                                            coordinate={{
-                                                latitude: item.Latitude,
-                                                longitude: item.Longitude,
-                                            }}
-                                            pinColor={
-                                                item.Status == "up"
-                                                    ? "green"
-                                                    : "red"
-                                            }
-                                            opacity={
-                                                item.ID == user.AP_id ? 1 : 0.45
-                                            }
-                                            isPreselected={
-                                                item.ID == user.AP_id
-                                            }
-                                        />
-                                    </>
-                                );
-                            })}
+                            {
+                                // For each AP, place a pin on its location and
+                                // draw a circle around its coverage area
+                                ap.map((item) => {
+                                    return (
+                                        <>
+                                            <Circle
+                                                key={"circle" + item.ID}
+                                                center={{
+                                                    latitude: item.Latitude,
+                                                    longitude: item.Longitude,
+                                                }}
+                                                // Radius in meters
+                                                radius={item.Radius * 1000}
+                                                // UP is green, DOWN is red
+                                                // Low opacity so things stay visible
+                                                fillColor={
+                                                    item.Status == "up"
+                                                        ? colors.notification +
+                                                          EStyleSheet.value(
+                                                              "$disabledHex"
+                                                          )
+                                                        : colors.primary +
+                                                          EStyleSheet.value(
+                                                              "$disabledHex"
+                                                          )
+                                                }
+                                            />
+                                            <Marker
+                                                title={item.Name}
+                                                key={"marker" + item.ID}
+                                                description={
+                                                    "Current Status: " +
+                                                    item.Status.toUpperCase()
+                                                }
+                                                coordinate={{
+                                                    latitude: item.Latitude,
+                                                    longitude: item.Longitude,
+                                                }}
+                                                pinColor={
+                                                    item.Status == "up"
+                                                        ? "green"
+                                                        : "red"
+                                                }
+                                                // Only the current AP is fully opaque
+                                                opacity={
+                                                    item.ID == user.AP_id
+                                                        ? 1
+                                                        : 0.45
+                                                }
+                                                isPreselected={
+                                                    item.ID == user.AP_id
+                                                }
+                                            />
+                                        </>
+                                    );
+                                })
+                            }
                         </MapView>
                     </View>
                 );
@@ -192,6 +219,10 @@ const OutageScreen = () => {
     );
 };
 
+/**
+ * JSON stylesheet to color the map in dark mode.
+ * Generated using Google's map tools.
+ */
 const darkMapStyle = [
     {
         elementType: "geometry",

@@ -9,12 +9,28 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import * as Linking from "expo-linking";
 import { AsyncContext } from "../util/async-manager";
 import { fetchPackage } from "../util/mock-api";
-import { colors } from "react-native-elements";
 
+// The following Components are pop-up boxes used to update contact info.
+// Since all test data is hard-coded into the app, any changes made to any
+// data will be lost as soon as the app restarts or the user logs out.
+
+/**
+ * Pop-up box used to update the user's email address.
+ * @param {*} props
+ * @param {*} setChangingEmail Function to deactivate the flag used to make
+ *                             this window appear.
+ * @param {*} dark Whether or not dark theme is enabled; taken from `useTheme`
+ * @param {*} inputStyle Stylesheet for the text input
+ * @param {*} colors Theme colors from `useTheme`
+ * @param {*} context AsyncContext for functions & data
+ */
 const EditEmail = (props) => {
     const [email, setEmail] = useState("");
     const emailRef = useRef(null);
 
+    /**
+     * Change the email address in the app state only.
+     */
     const submit = () => {
         props.context.setState((state) => ({
             user_data: { ...state.user_data, Email: email },
@@ -22,6 +38,7 @@ const EditEmail = (props) => {
         alert(
             "Since the test data is hard-coded in the app, this change will reset when you log out or restart."
         );
+        // Hide the pop-up
         props.setChangingEmail(false);
     };
 
@@ -46,6 +63,7 @@ const EditEmail = (props) => {
                     },
                 ]}
             >
+                {/* Input area */}
                 <Text style={[global_styles.h3, opacity.high]}>
                     Enter a new email address:
                 </Text>
@@ -63,6 +81,7 @@ const EditEmail = (props) => {
                     ref={emailRef}
                     onSubmitEditing={submit}
                 />
+                {/* Buttons */}
                 <View style={{ flexDirection: "row", width: "100%" }}>
                     <TouchableOpacity
                         style={{
@@ -77,6 +96,7 @@ const EditEmail = (props) => {
                             borderRadius: 5,
                         }}
                         onPress={() => {
+                            // Hide the pop-up
                             props.setChangingEmail(false);
                         }}
                     >
@@ -84,6 +104,7 @@ const EditEmail = (props) => {
                             CANCEL
                         </Text>
                     </TouchableOpacity>
+                    {/* Spacer */}
                     <View style={{ width: 15 }}></View>
                     <TouchableOpacity
                         style={{
@@ -115,10 +136,23 @@ const EditEmail = (props) => {
     );
 };
 
+/**
+ * Pop-up box used to update the user's phone number.
+ * @param {*} props
+ * @param {*} setChangingPhone Function to deactivate the flag used to make
+ *                             this window appear.
+ * @param {*} dark Whether or not dark theme is enabled; taken from `useTheme`
+ * @param {*} inputStyle Stylesheet for the text input
+ * @param {*} colors Theme colors from `useTheme`
+ * @param {*} context AsyncContext for functions & data
+ */
 const EditPhone = (props) => {
     const [phone, setPhone] = useState("");
     const phoneRef = useRef(null);
 
+    /**
+     * Change the phone number in the app state only.
+     */
     const submit = () => {
         props.context.setState((state) => ({
             user_data: { ...state.user_data, Phone: phone },
@@ -126,6 +160,7 @@ const EditPhone = (props) => {
         alert(
             "Since the test data is hard-coded in the app, this change will reset when you log out or restart."
         );
+        // Hide the pop-up
         props.setChangingPhone(false);
     };
 
@@ -150,6 +185,7 @@ const EditPhone = (props) => {
                     },
                 ]}
             >
+                {/* Input area */}
                 <Text style={[global_styles.h3, opacity.high]}>
                     Enter a new phone number:
                 </Text>
@@ -167,6 +203,7 @@ const EditPhone = (props) => {
                     ref={phoneRef}
                     onSubmitEditing={submit}
                 />
+                {/* Buttons */}
                 <View style={{ flexDirection: "row", width: "100%" }}>
                     <TouchableOpacity
                         style={{
@@ -181,6 +218,7 @@ const EditPhone = (props) => {
                             borderRadius: 5,
                         }}
                         onPress={() => {
+                            // Hide the pop-up
                             props.setChangingPhone(false);
                         }}
                     >
@@ -188,6 +226,7 @@ const EditPhone = (props) => {
                             CANCEL
                         </Text>
                     </TouchableOpacity>
+                    {/* Spacer */}
                     <View style={{ width: 15 }}></View>
                     <TouchableOpacity
                         style={{
@@ -219,10 +258,17 @@ const EditPhone = (props) => {
     );
 };
 
+/**
+ * Screen to provide access to account and service package information,
+ * as well as buttons to edit said information and contact WaveDirect sales.
+ */
 const AccountScreen = () => {
     const [changingEmail, setChangingEmail] = useState(false);
     const [changingPhone, setChangingPhone] = useState(false);
-    const { dark, colors, toggleTheme } = useTheme();
+    const { dark, colors } = useTheme();
+    /**
+     * Stylesheet for input fields in the components above.
+     */
     const inputStyle = {
         backgroundColor: colors.card,
         color: colors.text + EStyleSheet.value("$highHex"),
@@ -236,6 +282,7 @@ const AccountScreen = () => {
         borderWidth: 0,
         borderRadius: 5,
     };
+
     return (
         <View style={global_styles.container}>
             <AsyncContext.Consumer>
@@ -245,6 +292,7 @@ const AccountScreen = () => {
                     return (
                         <>
                             <ScrollView>
+                                {/* Header with name and account # */}
                                 <View
                                     style={{
                                         alignItems: "center",
@@ -264,6 +312,7 @@ const AccountScreen = () => {
                                             opacity.high,
                                         ]}
                                     />
+                                    {/* Name */}
                                     <Text
                                         style={[
                                             text_colors.onDark,
@@ -273,6 +322,7 @@ const AccountScreen = () => {
                                     >
                                         {user.First_Name + " " + user.Last_Name}
                                     </Text>
+                                    {/* Account # */}
                                     <Text
                                         style={[
                                             text_colors.onDark,
@@ -283,12 +333,14 @@ const AccountScreen = () => {
                                         Account #{user.Account_number}
                                     </Text>
                                 </View>
+                                {/* View containing all other information on the page */}
                                 <View style={{ flexGrow: 1, padding: 15 }}>
                                     <Text
                                         style={[global_styles.h2, opacity.high]}
                                     >
                                         Account Information
                                     </Text>
+                                    {/* Email info */}
                                     <View style={styles.card}>
                                         <Icon
                                             name="email"
@@ -299,7 +351,7 @@ const AccountScreen = () => {
                                             style={[
                                                 global_styles.h3,
                                                 opacity.med,
-                                                { flexGrow: 1 },
+                                                { flexGrow: 1, flexShrink: 1 },
                                             ]}
                                         >
                                             {user.Email}
@@ -322,6 +374,7 @@ const AccountScreen = () => {
                                             />
                                         </TouchableOpacity>
                                     </View>
+                                    {/* Phone info */}
                                     <View style={styles.card}>
                                         <Icon
                                             name="phone"
@@ -337,7 +390,6 @@ const AccountScreen = () => {
                                         >
                                             {user.Phone}
                                         </Text>
-
                                         <TouchableOpacity
                                             onPress={() =>
                                                 setChangingPhone(true)
@@ -356,6 +408,7 @@ const AccountScreen = () => {
                                             />
                                         </TouchableOpacity>
                                     </View>
+                                    {/* Address info */}
                                     <View style={styles.card}>
                                         <Icon
                                             name="my-location"
@@ -386,6 +439,7 @@ const AccountScreen = () => {
                                     >
                                         My Internet Package
                                     </Text>
+                                    {/* Service package info */}
                                     <View
                                         style={[
                                             styles.card,
@@ -475,6 +529,7 @@ const AccountScreen = () => {
                                     >
                                         Contact Sales
                                     </Text>
+                                    {/* Email sales */}
                                     <TouchableOpacity
                                         style={[
                                             styles.card,
@@ -509,6 +564,7 @@ const AccountScreen = () => {
                                             Email sales@wavedirect.net
                                         </Text>
                                     </TouchableOpacity>
+                                    {/* Call sales */}
                                     <TouchableOpacity
                                         style={[
                                             styles.card,
@@ -542,6 +598,8 @@ const AccountScreen = () => {
                                     </TouchableOpacity>
                                 </View>
                             </ScrollView>
+                            {/* Only render these pop-up windows if their
+                                corresponding flags are set. */}
                             {changingEmail ? (
                                 <EditEmail
                                     setChangingEmail={setChangingEmail}
@@ -568,6 +626,9 @@ const AccountScreen = () => {
     );
 };
 
+/**
+ * Styles for various components used on this page.
+ */
 const styles = EStyleSheet.create({
     card: {
         borderRadius: 5,
@@ -590,6 +651,7 @@ const styles = EStyleSheet.create({
         ...opacity.med,
         marginRight: 15,
     },
+    // Row of elements within a card
     cardRow: {
         flexDirection: "row",
         alignItems: "center",

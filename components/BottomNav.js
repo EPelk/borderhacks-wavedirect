@@ -6,19 +6,12 @@ import SupportScreen from "../screens/SupportScreen";
 // Icon from ThemedComponents does not properly change colors when unfocused
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
-import { StatusBar } from "react-native";
 
 const BottomNav = () => {
     const { dark, colors } = useTheme();
     const Tab = createMaterialBottomTabNavigator();
     return (
         <>
-            <StatusBar
-                animated={true}
-                hidden={false}
-                backgroundColor={colors.card}
-                barStyle={dark ? "light-conent" : "dark-content"}
-            />
             <Tab.Navigator
                 initialRouteName="Account"
                 shifting={true}
@@ -55,7 +48,7 @@ const BottomNav = () => {
                         tabBarLabel: "Live Support",
                         tabBarIcon: ({ color }) => (
                             <MaterialIcons
-                                name="chat"
+                                name="question-answer"
                                 size={26}
                                 color={color}
                             />

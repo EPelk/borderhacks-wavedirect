@@ -74,7 +74,7 @@ export const customers = [
         Country: "Canada",
         Email: "cjohnston@goskydivingonmars.com",
         Phone: "(783) 638-0301",
-        Package_id: 5,
+        Package_id: 4,
         AP_id: 1,
     },
     {
@@ -139,7 +139,7 @@ export const customers = [
         Country: "Canada",
         Email: "lnash@dontrobbanks.com",
         Phone: "(920) 402-1439",
-        Package_id: 5,
+        Package_id: 4,
         AP_id: 0,
     },
     {

@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import MapView, { Circle, Marker } from "react-native-maps";
@@ -101,7 +101,11 @@ const OutageScreen = () => {
                                     onPress={context.updateAPStatus}
                                 >
                                     <Text
-                                        style={[global_styles.h2, opacity.high]}
+                                        style={[
+                                            text_colors.onDark,
+                                            global_styles.h2,
+                                            dark ? opacity.high : {},
+                                        ]}
                                     >
                                         Refresh Map
                                     </Text>

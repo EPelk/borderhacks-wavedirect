@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { StatusBar, View, ScrollView, TouchableOpacity } from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { text_colors, global_styles, opacity } from "../util/style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,12 +13,6 @@ const AccountScreen = () => {
     const { dark, colors, toggleTheme } = useTheme();
     return (
         <View style={global_styles.container}>
-            <StatusBar
-                animated={true}
-                hidden={false}
-                backgroundColor="#0000"
-                barStyle="auto"
-            />
             <ScrollView>
                 <AsyncContext.Consumer>
                     {(context) => {

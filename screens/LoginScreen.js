@@ -52,6 +52,7 @@ const LoginScreen = () => {
                             keyboardType="email-address"
                             onChangeText={setUsername}
                             returnKeyType="go"
+                            autoCompleteType="email"
                             textContentType="emailAddress"
                             placeholder="Email address"
                             onSubmitEditing={() => passwdIn.current.focus()}

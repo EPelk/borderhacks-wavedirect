@@ -10,6 +10,8 @@ import { Icon, Text } from "../util/ThemedComponents";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomNav from "./BottomNav";
 import { StatusBar, View } from "react-native";
+import LoginScreen from "../screens/LoginScreen";
+import { AsyncContext } from "../util/async-manager";
 
 const DrawerContent = (props) => {
     const { dark, toggleTheme } = useTheme();
@@ -88,22 +90,26 @@ const DrawerNav = () => {
     const Drawer = createDrawerNavigator();
 
     return (
-        <Drawer.Navigator
-            initialRoute="Home"
-            backBehavior="initialRoute"
-            drawerContent={(props) => <DrawerContent {...props} />}
-            sceneContainerStyle={global_styles.container}
-        >
-            {true ? (
-                <>
-                    <Drawer.Screen name="Home" component={BottomNav} />
-                </>
-            ) : (
-                <Drawer.Screen name="login">
-                    {(props) => <Login {...props} />}
-                </Drawer.Screen>
+        <AsyncContext.Consumer>
+            {(context) => (
+                <Drawer.Navigator
+                    initialRoute="Login"
+                    backBehavior="initialRoute"
+                    drawerContent={(props) => <DrawerContent {...props} />}
+                    sceneContainerStyle={global_styles.container}
+                >
+                    {context.state.user_data ? (
+                        <>
+                            <Drawer.Screen name="Home" component={BottomNav} />
+                        </>
+                    ) : (
+                        <Drawer.Screen name="Login">
+                            {(props) => <LoginScreen {...props} />}
+                        </Drawer.Screen>
+                    )}
+                </Drawer.Navigator>
             )}
-        </Drawer.Navigator>
+        </AsyncContext.Consumer>
     );
 };
 

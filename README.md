@@ -19,3 +19,6 @@ This project is a cross-platform React Native app built on the Expo platform. To
   * The log out button
 * A login page with hard-coded user credentials (any email in the test data will work, and the password is always "password")
 * Simulated API to interact with hard-coded test data
+
+## Disclaimer
+I do not have access to an Apple device, so this project has not been tested on iOS. It should work, but I can't be certain.

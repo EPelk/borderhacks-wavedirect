@@ -495,6 +495,7 @@ const AccountScreen = () => {
                                             size={24}
                                             style={[
                                                 styles.cardIcon,
+                                                text_colors.onDark,
                                                 opacity.high,
                                             ]}
                                         />
@@ -502,6 +503,7 @@ const AccountScreen = () => {
                                             style={[
                                                 global_styles.h3,
                                                 opacity.high,
+                                                text_colors.onDark,
                                             ]}
                                         >
                                             Email sales@wavedirect.net
@@ -524,11 +526,17 @@ const AccountScreen = () => {
                                             name="phone"
                                             size={24}
                                             style={[
+                                                text_colors.onDark,
                                                 styles.cardIcon,
                                                 { opacity: 1 },
                                             ]}
                                         />
-                                        <Text style={[global_styles.h3]}>
+                                        <Text
+                                            style={[
+                                                global_styles.h3,
+                                                text_colors.onDark,
+                                            ]}
+                                        >
                                             Call (855) 844-9283
                                         </Text>
                                     </TouchableOpacity>

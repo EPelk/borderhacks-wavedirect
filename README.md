@@ -1,3 +1,6 @@
+# Security Disclaimer
+This project, and notably its package list, has not been updated since January 2021, and there are no plans to update or maintain it going forward. As such, the packages upon which this project depends are severely outdated and almost certainly vulnerable, and they should be updated before using this code.
+
 # borderhacks-wavedirect
 Created for the WaveDirect Challenge at BorderHacks 2020
 
